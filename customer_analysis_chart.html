@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ग्राहक विश्लेषण - Charts</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .chart-section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+        .chart-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-bottom: 20px;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .stat-box {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 ग्राहक खर्च विश्लेषण</h1>
+
+        <!-- Stats Box -->
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-label">कुल ग्राहक</div>
+                <div class="stat-value">166</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">खर्च करने वाले</div>
+                <div class="stat-value">41</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">कुल खर्च</div>
+                <div class="stat-value">₹15,046</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">औसत खर्च</div>
+                <div class="stat-value">₹362</div>
+            </div>
+        </div>
+
+        <!-- Chart 1: Top 10 Spenders -->
+        <div class="chart-section">
+            <div class="chart-title">🏆 Top 10 - सबसे ज्यादा खर्च करने वाले ग्राहक</div>
+            <div class="chart-container">
+                <canvas id="topSpendersChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Chart 2: Spending Distribution -->
+        <div class="chart-section">
+            <div class="chart-title">📈 खर्च की श्रेणी (Distribution)</div>
+            <div class="chart-container">
+                <canvas id="distributionChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Chart 3: Pie Chart -->
+        <div class="chart-section">
+            <div class="chart-title">🥧 खर्च करने वाले vs न करने वाले</div>
+            <div class="chart-container">
+                <canvas id="pieChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Chart 4: Spending Categories -->
+        <div class="chart-section">
+            <div class="chart-title">📊 खर्च की कैटेगरी</div>
+            <div class="chart-container">
+                <canvas id="categoriesChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Chart 1: Top 10 Spenders
+        const topSpendersCtx = document.getElementById('topSpendersChart').getContext('2d');
+        new Chart(topSpendersCtx, {
+            type: 'bar',
+            data: {
+                labels: ['8102639224', '8340239287', '7488946383', '8789681524', '9334767620', 
+                        '9506087821', '9661511126', '7001289785', '7894853421', '9234880139'],
+                datasets: [{
+                    label: 'खर्च (₹)',
+                    data: [982, 924, 912, 754, 705, 966, 659, 638, 636, 625],
+                    backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                    borderColor: 'rgba(102, 126, 234, 1)',
+                    borderWidth: 2,
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: true, position: 'top' }
+                },
+                scales: {
+                    y: { beginAtZero: true, title: { display: true, text: 'खर्च (₹)' } }
+                }
+            }
+        });
+
+        // Chart 2: Spending Distribution
+        const distributionCtx = document.getElementById('distributionChart').getContext('2d');
+        new Chart(distributionCtx, {
+            type: 'bar',
+            data: {
+                labels: ['500+', '100-499', '1-99', '0'],
+                datasets: [{
+                    label: 'ग्राहकों की संख्या',
+                    data: [12, 13, 16, 125],
+                    backgroundColor: ['#FF6B6B', '#FFA500', '#4ECDC4', '#95A5A6'],
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: true }
+                },
+                scales: {
+                    y: { beginAtZero: true, title: { display: true, text: 'ग्राहकों की संख्या' } }
+                }
+            }
+        });
+
+        // Chart 3: Pie Chart
+        const pieCtx = document.getElementById('pieChart').getContext('2d');
+        new Chart(pieCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['खर्च करने वाले (41)', 'न करने वाले (125)'],
+                datasets: [{
+                    data: [41, 125],
+                    backgroundColor: ['#667eea', '#e0e0e0'],
+                    borderColor: ['white', 'white'],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // Chart 4: Categories
+        const categoriesCtx = document.getElementById('categoriesChart').getContext('2d');
+        new Chart(categoriesCtx, {
+            type: 'radar',
+            data: {
+                labels: ['500+\n(₹)', '100-499\n(₹)', '1-99\n(₹)', 'शून्य\n(₹)'],
+                datasets: [{
+                    label: 'ग्राहक संख्या',
+                    data: [12, 13, 16, 125],
+                    borderColor: '#667eea',
+                    backgroundColor: 'rgba(102, 126, 234, 0.2)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: { beginAtZero: true }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
